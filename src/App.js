@@ -64,12 +64,18 @@ const CreateNew = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content: content.value,
-      author: author.value,
-      info: info.value,
+      content: content.forInput.value,
+      author: author.forInput.value,
+      info: info.forInput.value,
       votes: 0
     })    
     navigate('/')
+  }
+
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -78,21 +84,21 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...content.forInput} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author.forInput} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info.forInput} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='reset' onClick={handleReset}>reset</button>
       </form>
     </div>
   )
-
 }
 
 const Notification = ({ message }) => <div>{message}</div>

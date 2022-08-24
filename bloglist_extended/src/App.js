@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import UserInfo from './components/UserInfo'
@@ -8,14 +9,16 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { setMessage, setMsgStyle } from './reducers/notificationReducer'
+
 const App = () => {
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notification)
+
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
-  const [notificationMsg, setNotificationMsg] = useState(null)
-  const [messageStyle, setMessageStyle] = useState(null)
 
   const sortBlogs = (a, b) => {
     if (!a.likes && b.likes) {
@@ -59,12 +62,12 @@ const App = () => {
   const errorStyle = { ...successfulStyle, color: 'red' }
 
   const showNotification = (message, style) => {
-    setNotificationMsg(message)
-    setMessageStyle(style)
+    dispatch(setMessage(message))
+    dispatch(setMsgStyle(style))
 
     setTimeout(() => {
-      setNotificationMsg('')
-      setMessageStyle(null)
+      dispatch(setMessage(''))
+      dispatch(setMsgStyle(null))
     }, 3000)
   }
 
@@ -145,7 +148,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
-        <Notification message={notificationMsg} type={messageStyle} />
+        <Notification message={notification.message} type={notification.style} />
         <LoginForm handleLogin={handleLogin}
           username={username} password={password}
           onUsernameChange={({ target }) => setUsername(target.value)}
@@ -158,7 +161,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={notificationMsg} type={messageStyle} />
+      <Notification message={notification.message} type={notification.style} />
       <UserInfo
         nameLogged={user.name}
         handleLogout={handleLogout}

@@ -10,12 +10,13 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { setMessage, setMsgStyle } from './reducers/notificationReducer'
+import { setBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
+  const blogs = useSelector(state => state.blogs)
 
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -32,9 +33,10 @@ const App = () => {
 
   useEffect(() => {
     const getAll = async () => {
-      const blogs = await blogService.getAll()
-      const blogsSorted = blogs.sort(sortBlogs)
-      setBlogs( blogsSorted )
+      const allBlogs = await blogService.getAll()
+      const blogsSorted = allBlogs.sort(sortBlogs)
+      dispatch(setBlogs(blogsSorted))
+      // setBlogs( blogsSorted )
     }
     getAll()
   }, [])
@@ -104,8 +106,7 @@ const App = () => {
     createNewFromRef.current.toggleVisibility()
     try {
       const newBlog = await blogService.create(newBlogObject)
-
-      setBlogs(blogs.concat(newBlog).sort(sortBlogs))
+      dispatch(setBlogs(blogs.concat(newBlog).sort(sortBlogs)))
 
       showNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, successfulStyle)
 
@@ -121,8 +122,8 @@ const App = () => {
       const updatedObject = { ...blogToUpdate, likes: blogToUpdate.likes ? (blogToUpdate.likes + 1) : 1 }
 
       const updatedBlog = await blogService.update(id, updatedObject)
+      dispatch(setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog).sort(sortBlogs)))
 
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog).sort(sortBlogs))
     } catch (exception) {
       showNotification('error while liking a post', errorStyle)
     }

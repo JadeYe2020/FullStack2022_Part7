@@ -5,12 +5,14 @@ import { Provider } from 'react-redux'
 import App from './App'
 import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
+import userReducer from './reducers/userReducer'
 
 const store = configureStore({
   reducer: {
     blogs: blogReducer,
-    notification: notificationReducer
-  }
+    notification: notificationReducer,
+    user: userReducer,
+  },
 })
 
 ReactDOM.createRoot(document.getElementById('root')).render(

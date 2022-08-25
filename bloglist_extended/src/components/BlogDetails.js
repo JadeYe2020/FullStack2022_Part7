@@ -1,17 +1,18 @@
-import React from 'react'
+import { useState } from 'react'
 
-const BlogDetails = ({ blog, addLike }) => {
-  const Comments = () => {
-    return (
-      <div>
-        <h3>comments</h3>
-        <ul>
-          {blog.comments.map((c) => (
-            <li key={c}>{c}</li>
-          ))}
-        </ul>
-      </div>
-    )
+const BlogDetails = ({ blog, addLike, addComment }) => {
+  const [comment, setComment] = useState('')
+
+  const onTextChange = (e) => {
+    setComment(e.target.value)
+  }
+
+  const handleComment = (e) => {
+    e.preventDefault()
+
+    addComment(blog.id, comment)
+
+    setComment('')
   }
 
   if (!blog) {
@@ -30,7 +31,16 @@ const BlogDetails = ({ blog, addLike }) => {
         </button>
       </p>
       {blog.user ? <p>added by {blog.user.name}</p> : null}
-      {blog.comments.length ? <Comments /> : null}
+      <h3>comments</h3>
+      <form onSubmit={handleComment}>
+        <input type="text" value={comment} onChange={onTextChange} />
+        <button type="submit">add comment</button>
+      </form>
+      <ul>
+        {blog.comments.map((c) => (
+          <li key={c}>{c}</li>
+        ))}
+      </ul>
     </div>
   )
 }

@@ -177,6 +177,28 @@ const App = () => {
     }
   }
 
+  const addComment = async (id, comment) => {
+    try {
+      const blogToComment = blogs.find((blog) => blog.id === id)
+
+      const updatedObject = {
+        comments: blogToComment.comments.concat(comment),
+      }
+
+      const updatedBlog = await blogService.addComment(id, updatedObject)
+
+      dispatch(
+        setBlogs(
+          blogs
+            .map((blog) => (blog.id !== id ? blog : updatedBlog))
+            .sort(sortBlogs)
+        )
+      )
+    } catch (exception) {
+      showNotification('error while adding a comment', errorStyle)
+    }
+  }
+
   const navStyle = {
     background: 'lightgrey',
     display: 'flex',
@@ -233,7 +255,13 @@ const App = () => {
         />
         <Route
           path="/blogs/:id"
-          element={<BlogDetails blog={blog} addLike={addLike} />}
+          element={
+            <BlogDetails
+              blog={blog}
+              addLike={addLike}
+              addComment={addComment}
+            />
+          }
         />
         <Route path="/users/:id" element={<UserDetails user={user} />} />
         <Route path="/users" element={<UserList users={users} />} />

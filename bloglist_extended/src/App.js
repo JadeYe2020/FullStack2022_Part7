@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import LoginInfo from './components/LoginInfo'
 import Notification from './components/Notification'
@@ -164,6 +164,13 @@ const App = () => {
     }
   }
 
+  // confirm individuale user via the url
+  const match = useMatch('/users/:id')
+  let user = null
+  if (users) {
+    user = match ? users.find((u) => u.id === match.params.id) : null
+  }
+
   if (loginData.loggedInUser === null) {
     return (
       <div>
@@ -205,8 +212,8 @@ const App = () => {
             />
           }
         />
+        <Route path="/users/:id" element={<UserDetails user={user} />} />
         <Route path="/users" element={<UserList users={users} />} />
-        <Route path="/users/:id" element={<UserDetails />} />
       </Routes>
     </div>
   )

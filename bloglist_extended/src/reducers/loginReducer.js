@@ -3,11 +3,11 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   username: '',
   password: '',
-  user: null,
+  loggedInUser: null,
 }
 
-const userSlice = createSlice({
-  name: 'user',
+const loginSlice = createSlice({
+  name: 'login',
   initialState,
   reducers: {
     setUsername(state, action) {
@@ -16,11 +16,11 @@ const userSlice = createSlice({
     setPassword(state, action) {
       return { ...state, password: action.payload }
     },
-    setUser(state, action) {
-      return { ...state, user: action.payload }
+    setLoggedIn(state, action) {
+      return { ...state, loggedInUser: action.payload }
     },
   },
 })
 
-export const { setUsername, setPassword, setUser } = userSlice.actions
-export default userSlice.reducer
+export const { setUsername, setPassword, setLoggedIn } = loginSlice.actions
+export default loginSlice.reducer

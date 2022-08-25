@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
-import UserInfo from './components/UserInfo'
+import LoginInfo from './components/LoginInfo'
 import Notification from './components/Notification'
 import UserList from './components/UserList'
 import blogService from './services/blogs'
@@ -11,15 +11,16 @@ import loginService from './services/login'
 
 import { setMessage, setMsgStyle } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
-import { setUsername, setPassword, setUser } from './reducers/userReducer'
+import { setUsername, setPassword, setLoggedIn } from './reducers/loginReducer'
 import { setUsers } from './reducers/usersReducer'
 import BlogList from './components/BlogList'
+import UserDetails from './components/UserDetails'
 
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
-  const userData = useSelector((state) => state.user)
+  const loginData = useSelector((state) => state.login)
   const users = useSelector((state) => state.allUsers)
 
   const sortBlogs = (a, b) => {
@@ -50,7 +51,7 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      dispatch(setUser(user))
+      dispatch(setLoggedIn(user))
       blogService.setToken(user.token)
     }
   }, [])
@@ -82,8 +83,8 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const username = userData.username
-      const password = userData.password
+      const username = loginData.username
+      const password = loginData.password
       const user = await loginService.login({
         username,
         password,
@@ -92,7 +93,7 @@ const App = () => {
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
 
       blogService.setToken(user.token)
-      dispatch(setUser(user))
+      dispatch(setLoggedIn(user))
       // reset login form
       dispatch(setUsername(''))
       dispatch(setPassword(''))
@@ -103,7 +104,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.clear()
-    dispatch(setUser(null))
+    dispatch(setLoggedIn(null))
   }
 
   const createNewFromRef = useRef()
@@ -163,7 +164,7 @@ const App = () => {
     }
   }
 
-  if (userData.user === null) {
+  if (loginData.loggedInUser === null) {
     return (
       <div>
         <h2>log in to application</h2>
@@ -173,8 +174,8 @@ const App = () => {
         />
         <LoginForm
           handleLogin={handleLogin}
-          username={userData.username}
-          password={userData.password}
+          username={loginData.username}
+          password={loginData.password}
           onUsernameChange={({ target }) => dispatch(setUsername(target.value))}
           onPasswordChange={({ target }) => dispatch(setPassword(target.value))}
         />
@@ -186,7 +187,10 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={notification.message} type={notification.style} />
-      <UserInfo nameLogged={userData.user.name} handleLogout={handleLogout} />
+      <LoginInfo
+        nameLogged={loginData.loggedInUser.name}
+        handleLogout={handleLogout}
+      />
       <Routes>
         <Route
           path="/"
@@ -195,13 +199,14 @@ const App = () => {
               addNew={addNew}
               addLike={addLike}
               blogs={blogs}
-              userData={userData}
+              userData={loginData}
               deletePost={deletePost}
               createNewFromRef={createNewFromRef}
             />
           }
         />
         <Route path="/users" element={<UserList users={users} />} />
+        <Route path="/users/:id" element={<UserDetails />} />
       </Routes>
     </div>
   )

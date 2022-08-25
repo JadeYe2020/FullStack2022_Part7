@@ -63,3 +63,13 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhlb
 ###
 DELETE http://localhost:3003/api/blogs/62d597fe9b3a0541e20c1b42
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2MmQxYWYxMjJjZjVmN2QyOTUzMDczMWMiLCJpYXQiOjE2NTc5MjIxNjR9.7CossgbsUSDLLIEJak9kpYFMdWeDZBHIO6CK97oj2VY
+
+###
+POST http://localhost:3003/api/blogs/62ced5d8dd6df01e21d805b3/comments
+Content-Type: application/json
+
+  {
+    "comments": [
+      "first comment"
+    ]
+  }

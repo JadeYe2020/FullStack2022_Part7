@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Link, Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import LoginInfo from './components/LoginInfo'
 import Notification from './components/Notification'
@@ -177,6 +177,12 @@ const App = () => {
     }
   }
 
+  const navStyle = {
+    background: 'lightgrey',
+    display: 'flex',
+    alignItems: 'center',
+  }
+
   if (loginData.loggedInUser === null) {
     return (
       <div>
@@ -198,12 +204,21 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <nav style={navStyle}>
+        <Link to="/" style={{ padding: 5 }}>
+          blogs
+        </Link>
+        <Link to="/users" style={{ padding: 5 }}>
+          users
+        </Link>
+        <LoginInfo
+          nameLogged={loginData.loggedInUser.name}
+          handleLogout={handleLogout}
+        />
+      </nav>
+      <h1>blogs app</h1>
       <Notification message={notification.message} type={notification.style} />
-      <LoginInfo
-        nameLogged={loginData.loggedInUser.name}
-        handleLogout={handleLogout}
-      />
+
       <Routes>
         <Route
           path="/"

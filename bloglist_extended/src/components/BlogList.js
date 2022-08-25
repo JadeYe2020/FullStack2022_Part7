@@ -14,13 +14,7 @@ const BlogList = (props) => {
         <CreateNew createNew={props.addNew} />
       </Togglable>
       {props.blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          addLike={() => props.addLike(blog.id)}
-          username={props.userData.loggedInUser.username}
-          deletePost={() => props.deletePost(blog.id)}
-        />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   )

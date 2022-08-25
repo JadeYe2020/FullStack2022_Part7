@@ -14,6 +14,7 @@ import { setBlogs } from './reducers/blogReducer'
 import { setUsername, setPassword, setLoggedIn } from './reducers/loginReducer'
 import { setUsers } from './reducers/usersReducer'
 import BlogList from './components/BlogList'
+import BlogDetails from './components/BlogDetails'
 import UserDetails from './components/UserDetails'
 
 const App = () => {
@@ -55,6 +56,18 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  // confirm individuale user via the url
+  const matchUserId = useMatch('/users/:id')
+  const user = matchUserId
+    ? users.find((u) => u.id === matchUserId.params.id)
+    : null
+
+  // confirm individuale blog via the url
+  const matchBlogId = useMatch('/blogs/:id')
+  const blog = matchBlogId
+    ? blogs.find((b) => b.id === matchBlogId.params.id)
+    : null
 
   // styles for notifications
   const successfulStyle = {
@@ -164,13 +177,6 @@ const App = () => {
     }
   }
 
-  // confirm individuale user via the url
-  const match = useMatch('/users/:id')
-  let user = null
-  if (users) {
-    user = match ? users.find((u) => u.id === match.params.id) : null
-  }
-
   if (loginData.loggedInUser === null) {
     return (
       <div>
@@ -204,13 +210,15 @@ const App = () => {
           element={
             <BlogList
               addNew={addNew}
-              addLike={addLike}
               blogs={blogs}
-              userData={loginData}
               deletePost={deletePost}
               createNewFromRef={createNewFromRef}
             />
           }
+        />
+        <Route
+          path="/blogs/:id"
+          element={<BlogDetails blog={blog} addLike={addLike} />}
         />
         <Route path="/users/:id" element={<UserDetails user={user} />} />
         <Route path="/users" element={<UserList users={users} />} />

@@ -4,13 +4,15 @@ import { Routes, Route } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import UserInfo from './components/UserInfo'
 import Notification from './components/Notification'
-import UserDetails from './components/UserDetails'
+import UserList from './components/UserList'
 import blogService from './services/blogs'
+import userService from './services/users'
 import loginService from './services/login'
 
 import { setMessage, setMsgStyle } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
 import { setUsername, setPassword, setUser } from './reducers/userReducer'
+import { setUsers } from './reducers/usersReducer'
 import BlogList from './components/BlogList'
 
 const App = () => {
@@ -18,6 +20,7 @@ const App = () => {
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
   const userData = useSelector((state) => state.user)
+  const users = useSelector((state) => state.allUsers)
 
   const sortBlogs = (a, b) => {
     if (!a.likes && b.likes) {
@@ -36,6 +39,9 @@ const App = () => {
       const allBlogs = await blogService.getAll()
       const blogsSorted = allBlogs.sort(sortBlogs)
       dispatch(setBlogs(blogsSorted))
+      // get users data as well
+      const allUsers = await userService.getUsers()
+      dispatch(setUsers(allUsers))
     }
     getAll()
   }, [])
@@ -195,7 +201,7 @@ const App = () => {
             />
           }
         />
-        <Route path="/users" element={<UserDetails />} />
+        <Route path="/users" element={<UserList users={users} />} />
       </Routes>
     </div>
   )

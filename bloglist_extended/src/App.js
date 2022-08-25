@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Blog from './components/Blog'
+import { Routes, Route } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import UserInfo from './components/UserInfo'
-import CreateNew from './components/CreateNew'
-import Togglable from './components/Togglable'
 import Notification from './components/Notification'
+import UserDetails from './components/UserDetails'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { setMessage, setMsgStyle } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
 import { setUsername, setPassword, setUser } from './reducers/userReducer'
+import BlogList from './components/BlogList'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -181,23 +181,22 @@ const App = () => {
       <h2>blogs</h2>
       <Notification message={notification.message} type={notification.style} />
       <UserInfo nameLogged={userData.user.name} handleLogout={handleLogout} />
-      <Togglable
-        buttonLabelToShow="new post"
-        buttonLabelToHide="cancel"
-        ref={createNewFromRef}
-      >
-        <h2>create new</h2>
-        <CreateNew createNew={addNew} />
-      </Togglable>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          addLike={() => addLike(blog.id)}
-          username={userData.user.username}
-          deletePost={() => deletePost(blog.id)}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <BlogList
+              addNew={addNew}
+              addLike={addLike}
+              blogs={blogs}
+              userData={userData}
+              deletePost={deletePost}
+              createNewFromRef={createNewFromRef}
+            />
+          }
         />
-      ))}
+        <Route path="/users" element={<UserDetails />} />
+      </Routes>
     </div>
   )
 }

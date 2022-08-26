@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import * as Styled from './Styles'
 
 const UserList = ({ users }) => {
   return (
-    <div>
+    <Styled.Page>
       <h2>Users</h2>
       <table>
         <tbody>
@@ -14,14 +14,16 @@ const UserList = ({ users }) => {
           {users.map((u) => (
             <tr key={u.id}>
               <td>
-                <Link to={`/users/${u.id}`}>{u.name}</Link>
+                <Styled.RegularLink to={`/users/${u.id}`}>
+                  {u.name}
+                </Styled.RegularLink>
               </td>
               <td>{u.blogs.length}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </Styled.Page>
   )
 }
 

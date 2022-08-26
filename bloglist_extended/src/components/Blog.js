@@ -1,20 +1,20 @@
-import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import * as Styled from './Styles'
+
+const BlogItem = styled.div`
+  padding-top: 10px;
+  padding-left: 5px;
+  border: 1px solid grey;
+  margin: 5px;
+`
 
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
   return (
-    <div className="blogItem" style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`}>
+    <BlogItem className="blogItem">
+      <Styled.RegularLink to={`/blogs/${blog.id}`}>
         {blog.title} {blog.author}
-      </Link>
-    </div>
+      </Styled.RegularLink>
+    </BlogItem>
   )
 }
 

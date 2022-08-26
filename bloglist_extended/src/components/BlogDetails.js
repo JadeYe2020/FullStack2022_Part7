@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import * as Styled from './Styles'
 
 const BlogDetails = ({ blog, addLike, addComment }) => {
   const [comment, setComment] = useState('')
@@ -26,15 +27,15 @@ const BlogDetails = ({ blog, addLike, addComment }) => {
       <p>{blog.url}</p>
       <p>
         {blog.likes} likes{' '}
-        <button id="like" onClick={() => addLike(blog.id)}>
+        <Styled.Button id="like" onClick={() => addLike(blog.id)}>
           like
-        </button>
+        </Styled.Button>
       </p>
       {blog.user ? <p>added by {blog.user.name}</p> : null}
       <h3>comments</h3>
       <form onSubmit={handleComment}>
         <input type="text" value={comment} onChange={onTextChange} />
-        <button type="submit">add comment</button>
+        <Styled.Button type="submit">add comment</Styled.Button>
       </form>
       <ul>
         {blog.comments.map((c) => (

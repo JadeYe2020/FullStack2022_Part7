@@ -1,10 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Routes, Route, useMatch } from 'react-router-dom'
+import styled from 'styled-components'
+import * as Styled from './components/Styles'
+
 import LoginForm from './components/LoginForm'
 import LoginInfo from './components/LoginInfo'
 import Notification from './components/Notification'
 import UserList from './components/UserList'
+import BlogList from './components/BlogList'
+import BlogDetails from './components/BlogDetails'
+import UserDetails from './components/UserDetails'
+
 import blogService from './services/blogs'
 import userService from './services/users'
 import loginService from './services/login'
@@ -13,9 +20,28 @@ import { setMessage, setMsgStyle } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
 import { setUsername, setPassword, setLoggedIn } from './reducers/loginReducer'
 import { setUsers } from './reducers/usersReducer'
-import BlogList from './components/BlogList'
-import BlogDetails from './components/BlogDetails'
-import UserDetails from './components/UserDetails'
+
+// const Page = styled.div`
+//   font-family: Arial, Helvetica, sans-serif;
+//   text-transform: capitalize;
+//   color: #1a535c;
+// `
+
+const NavBar = styled.nav`
+  background: #ffe66d;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+`
+
+const NavLink = styled(Link)`
+  text-decoration: none;
+  text-transform: uppercase;
+  &:hover {
+    color: #ff6b6b;
+  }
+`
 
 const App = () => {
   const dispatch = useDispatch()
@@ -199,15 +225,9 @@ const App = () => {
     }
   }
 
-  const navStyle = {
-    background: 'lightgrey',
-    display: 'flex',
-    alignItems: 'center',
-  }
-
   if (loginData.loggedInUser === null) {
     return (
-      <div>
+      <Styled.Page>
         <h2>log in to application</h2>
         <Notification
           message={notification.message}
@@ -220,24 +240,20 @@ const App = () => {
           onUsernameChange={({ target }) => dispatch(setUsername(target.value))}
           onPasswordChange={({ target }) => dispatch(setPassword(target.value))}
         />
-      </div>
+      </Styled.Page>
     )
   }
 
   return (
-    <div>
-      <nav style={navStyle}>
-        <Link to="/" style={{ padding: 5 }}>
-          blogs
-        </Link>
-        <Link to="/users" style={{ padding: 5 }}>
-          users
-        </Link>
+    <Styled.Page>
+      <NavBar>
+        <NavLink to="/">blogs</NavLink>
+        <NavLink to="/users">users</NavLink>
         <LoginInfo
           nameLogged={loginData.loggedInUser.name}
           handleLogout={handleLogout}
         />
-      </nav>
+      </NavBar>
       <h1>blogs app</h1>
       <Notification message={notification.message} type={notification.style} />
 
@@ -266,7 +282,7 @@ const App = () => {
         <Route path="/users/:id" element={<UserDetails user={user} />} />
         <Route path="/users" element={<UserList users={users} />} />
       </Routes>
-    </div>
+    </Styled.Page>
   )
 }
 

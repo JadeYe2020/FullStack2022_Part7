@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import * as Styled from './Styles'
 
 const CreateNew = ({ createNew }) => {
   const [title, setTitle] = useState('')
@@ -21,7 +22,9 @@ const CreateNew = ({ createNew }) => {
     event.preventDefault()
 
     createNew({
-      title, author, url
+      title,
+      author,
+      url,
     })
 
     setTitle('')
@@ -33,17 +36,29 @@ const CreateNew = ({ createNew }) => {
     <form onSubmit={handleCreate}>
       <div>
         title:
-        <input id='title-input' type='text' value={title} onChange={onTitleChange} />
+        <input
+          id="title-input"
+          type="text"
+          value={title}
+          onChange={onTitleChange}
+        />
       </div>
       <div>
         author:
-        <input id='author-input' type='text' value={author} onChange={onAuthorChange} />
+        <input
+          id="author-input"
+          type="text"
+          value={author}
+          onChange={onAuthorChange}
+        />
       </div>
       <div>
         url:
-        <input id='url-input' type='text' value={url} onChange={onUrlChange} />
+        <input id="url-input" type="text" value={url} onChange={onUrlChange} />
       </div>
-      <button id='submit-button' type="submit">create</button>
+      <Styled.Button id="submit-button" type="submit">
+        create
+      </Styled.Button>
     </form>
   )
 }
